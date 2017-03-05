@@ -1,0 +1,13 @@
+{
+  "name":"Precious Cargo App",
+  "id":"95495257",
+  "version": "0.0.0",
+  "src": "src",
+  "dist": "dist",
+  "main": "index.html",
+  "icon": "Icon.png",
+  "developer": "Abhishek Shrivastava",
+  "category": "General",
+  "type": "RemoteLow",
+  "description": "Generated on 3/3/2017, 9:45:17 PM by ngi-sdk version "
+}

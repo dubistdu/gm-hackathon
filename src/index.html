@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <meta name="baseurl" content="">
+
+  <title>Precious Cargo</title>
+      <link rel="stylesheet" href="css/reset.css" type="text/css">
+      <link rel="stylesheet" href="css/app.css" type="text/css">
+    <script src="GMLIB/system.js"></script>
+    <script src="GMLIB/info.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="http://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.2/linear/gauge.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" media="all" href="rw_common/themes/offroad/consolidated.css?rwcache=510302408" />
+
+
+  <link href="https://fonts.googleapis.com/css?family=Istok+Web:400,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic" rel="stylesheet">
+
+  <!--[if lt IE 9]>
+    <script src="rw_common/themes/offroad/assets/javascript/html5shiv.js"></script>
+    <script src="rw_common/themes/offroad/assets/javascript/respond.js"></script>
+  <![endif]-->
+   <script type="text/javascript">
+       $('#alert').hide();
+    $(document).ready(function () {
+        WebSocketTest();
+    });
+         function WebSocketTest()
+         {
+            if ("WebSocket" in window)
+            {
+              // alert("WebSocket is supported by your Browser!");
+
+               // Let us open a web socket
+               var ws = new WebSocket("ws://ec2-35-163-45-215.us-west-2.compute.amazonaws.com:8080");
+
+               ws.onopen = function(evt)
+               {
+                  // Web Socket is connected, send data using send()
+                   var received_msg = evt.data;
+                //  ws.send("Message to send");
+                  //alert(received_msg);
+               };
+
+               ws.onmessage = function (evt)
+               {
+                   console.log('ON MESSAGE', evt);
+                   var received_msg = evt.data;
+
+                   var start = received_msg.indexOf('{');
+                   if(start !== -1) {
+                       // TRIM THE MESSAGE DOWN TO THE START OF THE JSON
+                       var trimmed_msg = received_msg.slice(start, received_msg.length);
+                       try{
+
+
+                           var obj = jQuery.parseJSON( trimmed_msg );
+
+                           var gauge_count = 0;
+
+                           var alertState = obj['alertState'];
+
+
+                           if(alertState === 'none') {
+                               setTimeout(function(){
+                                $('#alert').hide();
+                                }, 1000);
+
+
+                           } else {
+                               $('#alert').show();
+                           }
+
+                           document.gauges.forEach(function(gauge, index) {
+
+                                                   if (index) {
+
+
+                                                   gauge_count++;
+
+                                                        var key = gauge.canvas.element.id;
+
+                                                        var val = obj[key];
+
+                                                        gauge.value = val;
+
+                                                   }
+
+
+
+
+
+                                                   });
+
+                       //alert('gauge_count ', gauge_count);
+
+
+
+                       } catch(e) {
+                           alert('BLAREGH!', e);
+                       }
+
+                   } else {
+                       // NOT A JSON MESSAGE SO DO NOT PARSE.
+                   }
+               };
+
+               ws.onclose = function()
+               {
+                  // websocket is closed.
+                  alert("Connection is closed...");
+               };
+            }
+
+            else
+            {
+               // The browser doesn't support WebSocket
+               alert("WebSocket NOT supported by your Browser!");
+            }
+         }
+
+
+	     document.addEventListener("DOMContentLoaded", function (event) {
+
+
+
+    var gauge = new LinearGauge({
+    renderTo: 'canvas-id',
+    width: 400,
+    height: 60,
+    minValue: 0,
+    maxValue: 100,
+    majorTicks: [
+        "0",
+        "20",
+        "40",
+        "60",
+        "80",
+        "100"
+    ],
+    minorTicks: 10,
+    strokeTicks: true,
+    colorPlate: "transparent",
+    borderShadowWidth: 0,
+    borders: false,
+    barBeginCircle: false,
+    tickSide: "left",
+    numberSide: "left",
+    needleSide: "left",
+    needleType: "line",
+    needleWidth: 3,
+    colorNeedle: "#222",
+    colorNeedleEnd: "#222",
+    animationDuration: 1500,
+    animationRule: "linear",
+    animationTarget: "plate",
+    barWidth: 5,
+    ticksWidth: 50,
+    ticksWidthMinor: 15
+}).draw();
+
+
+              setTimeout(function () {
+                g1.refresh(data.faceResults.expressions.eyeClosure);
+                g2.refresh(data.faceResults.expressions.mouthOpen);
+                g3.refresh(data.faceResults.expressions.lidTighten);
+              }, 1000);
+            });
+
+      </script>
+
+
+
+
+
+</head>
+
+<body>
+    <div id="close"><img src="images/close.png" onclick="gm.system.closeApp()" alt="close">
+    <div class="site-title"><a><P>PRECIOUS CARGO</P></a></div>
+    </div>
+  <div id="page" class="site">
+
+  <div id="alert" style="display: none">
+
+    <p id="message">PAY ATTENTION!</p>
+
+  </div>
+
+
+    <header id="masthead" role="banner">
+      <div class="container"> <!-- .site-branding -->
+
+     <table style="width: 100%;">
+<tbody>
+<tr>
+<td style="width: 25.0928%;"><h1>CONTENT</h1></td>
+<td style="width: 73.9072%;">
+<canvas id="attention" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    evt="15"
+></canvas>
+</td>
+</tr>
+<tr>
+<td style="width: 25.0928%;"><h1>SADNESS</h1></td>
+<td style="width: 73.9072%;">
+
+<canvas id="eyeClosureScore" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    data-ticks-width-minor="15"
+></canvas>
+
+</td>
+</tr>
+<tr>
+<td style="width: 25.0928%;"><h1>JOY</h1></td>
+<td style="width: 73.9072%;">
+
+<canvas id="mouth" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    data-ticks-width-minor="15"
+></canvas>
+
+
+
+</td>
+</tr>
+<tr>
+<td style="width: 25.0928%;"><h1>SMILE</h1></td>
+<td style="width: 73.9072%;">
+
+<canvas id="yaw" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    data-ticks-width-minor="15"
+></canvas>
+
+</td>
+</tr>
+<tr>
+<td style="width: 25.0928%;"><h1>ENGAGEMENT</h1></td>
+<td style="width: 73.9072%;">
+	<canvas id="pitch" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    data-ticks-width-minor="15"
+></canvas>
+</td>
+</tr>
+<tr>
+<td style="width: 25.0928%;"><h1>BALANCE</h1></td>
+<td style="width: 73.9072%;">
+	<canvas id="roll" data-type="linear-gauge"
+    data-width="400"
+    data-height="60"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,20,40,60,80,100"
+    data-minor-ticks="10"
+    data-stroke-ticks="true"
+    data-color-plate="transparent"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-bar-begin-circle="false"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-needle-type="line"
+    data-needle-width="3"
+    data-color-needle="#222"
+    data-color-needle-end="#222"
+    data-animation-duration="1500"
+    data-animation-rule="linear"
+    data-animation-target="plate"
+    data-bar-width="5"
+    data-ticks-width="50"
+    data-ticks-width-minor="15"
+></canvas>
+
+</td>
+</tr>
+</tbody>
+</table>
+      </div><!-- .container -->
+    </header>
+
+    <!-- .site-header -->
+
+    <div class="container container-main"> </div>
+
+    <footer id="footer" class="site-footer" role="contentinfo">
+      <div class="row">
+
+      </div>
+    </footer>
+  </div>
+
+  <div class="body-overlay"></div>
+
+  <!-- Javascript includes -->
+  <script src="rw_common/themes/offroad/javascript.js?rwcache=510302408"></script>
+   <script src="js/app.js"></script>
+  <script type="text/javascript" src="rw_common/themes/offroad/assets/javascript/background-blur.js?rwcache=510302408"></script>
+
+
+</body>
+</html>

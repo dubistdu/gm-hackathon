@@ -1,0 +1,35 @@
+/* Your CSS goes here */
+#main {
+  padding-top: 30px;
+  text-align: center;
+  /*background-image: url("images/background.jpg");*/
+}
+body {
+    background-image: url("/images/login-background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+
+h1 {
+  color: white;
+}
+
+#close {
+  position: absolute;
+  top: 90px;
+  right: 0;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  z-index: 1000;
+}
+#close img {
+  width: 100%;
+}
+
+@media (min-width: 801px) {
+  #close {
+    top: 104px;
+  }
+}
